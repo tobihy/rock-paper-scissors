@@ -84,8 +84,15 @@ function game() {
     );
   }
 
+  let finalResult =
+    playerScore > computerScore
+      ? "Congratulations! You win!"
+      : playerScore < computerScore
+      ? "Sorry, you lost!"
+      : "It's a draw!";
+
   console.log(
-    `Final score:\n Player: ${playerScore} | Computer: ${computerScore}`
+    `Final score:\n Player: ${playerScore} | Computer: ${computerScore}\n ${finalResult}`
   );
 }
 
