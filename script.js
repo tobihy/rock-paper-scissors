@@ -2,7 +2,7 @@ const buttons = document.querySelectorAll("button");
 
 buttons.forEach((button) => {
   console.log(button.id);
-  button.addEventListener("click", () => playRound(button.id));
+  button.addEventListener("click", playRound);
 });
 
 function computerPlay() {
@@ -22,7 +22,8 @@ function setResultMessage(message) {
   resultMessage.textContent = message;
 }
 
-function playRound(playerSelection) {
+function playRound(event) {
+  let playerSelection = event.target.id;
   let playerChoice =
     playerSelection.slice(0, 1).toUpperCase() +
     playerSelection.slice(1).toLowerCase();
@@ -108,7 +109,6 @@ function updateScores(result) {
 
 function cleanUp() {
   const buttons = document.querySelectorAll("button");
-  buttons.forEach((button) => {
-    button.disabled = true;
-  });
+  buttons.forEach((button) => button.removeEventListener("click", playRound));
+  buttons.forEach((button) => (button.disabled = true));
 }
