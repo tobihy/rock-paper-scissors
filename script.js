@@ -1,3 +1,10 @@
+const buttons = document.querySelectorAll("button");
+
+buttons.forEach((button) => {
+  console.log(button.id);
+  button.addEventListener("click", () => playRound(button.id));
+});
+
 function computerPlay() {
   let randomNumber = Math.floor(Math.random() * 3);
 
@@ -10,10 +17,17 @@ function computerPlay() {
   }
 }
 
-function playRound(playerSelection, computerSelection) {
+function setResultMessage(message) {
+  let resultMessage = document.querySelector("#resultMessage");
+  resultMessage.textContent = message;
+}
+
+function playRound(playerSelection) {
   let playerChoice =
     playerSelection.slice(0, 1).toUpperCase() +
     playerSelection.slice(1).toLowerCase();
+
+  let computerSelection = computerPlay();
 
   let winMessage = `You win! ${playerChoice} beats ${computerSelection}!`;
   let loseMessage = `You lose! ${computerSelection} beats ${playerChoice}!`;
@@ -22,78 +36,79 @@ function playRound(playerSelection, computerSelection) {
   switch (playerChoice) {
     case "Rock":
       if (computerSelection == "Scissors") {
-        console.log(winMessage);
-        return 1;
+        setResultMessage(winMessage);
+        updateScores(1);
       } else if (computerSelection == "Paper") {
-        console.log(loseMessage);
-        return -1;
+        setResultMessage(loseMessage);
+        updateScores(-1);
+      } else {
+        setResultMessage(drawMessage);
+        updateScores(0);
       }
-      console.log(drawMessage);
-      return 0;
+      break;
 
     case "Paper":
       if (computerSelection == "Rock") {
-        console.log(winMessage);
-        return 1;
+        setResultMessage(winMessage);
+        updateScores(1);
       } else if (computerSelection == "Scissors") {
-        console.log(loseMessage);
-        return -1;
+        setResultMessage(loseMessage);
+        updateScores(-1);
+      } else {
+        setResultMessage(drawMessage);
+        updateScores(0);
       }
-      console.log(drawMessage);
-      return 0;
+      break;
 
     case "Scissors":
       if (computerSelection == "Paper") {
-        console.log(winMessage);
-        return 1;
+        setResultMessage(winMessage);
+        updateScores(1);
       } else if (computerSelection == "Rock") {
-        console.log(loseMessage);
-        return -1;
+        setResultMessage(loseMessage);
+        updateScores(-1);
+      } else {
+        setResultMessage(drawMessage);
+        updateScores(0);
       }
-      console.log(drawMessage);
-      return 0;
+      break;
   }
 }
 
-function game() {
-  let playerScore = 0;
-  let computerScore = 0;
+let playerScore = 0;
+let computerScore = 0;
 
-  for (let i = 0; i < 5; i++) {
-    let playerSelection = prompt(
-      "Make your decision:",
-      "Rock, paper or scissors"
-    );
-    let computerSelection = computerPlay();
-
-    let result = playRound(playerSelection, computerSelection);
-
-    switch (result) {
-      case 1:
-        playerScore++;
-        break;
-      case -1:
-        computerScore++;
-        break;
-      default:
-        break;
-    }
-
-    console.log(
-      `Current score:\n Player: ${playerScore} | Computer: ${computerScore}`
-    );
+function updateScores(result) {
+  switch (result) {
+    case 1:
+      playerScore++;
+      break;
+    case -1:
+      computerScore++;
+      break;
+    default:
+      break;
   }
 
-  let finalResult =
-    playerScore > computerScore
-      ? "Congratulations! You win!"
-      : playerScore < computerScore
-      ? "Sorry, you lost!"
-      : "It's a draw!";
+  let resultMessage = document.querySelector("#resultMessage");
+  let currentScore = document.querySelector("#currentScore");
 
-  console.log(
-    `Final score:\n Player: ${playerScore} | Computer: ${computerScore}\n ${finalResult}`
-  );
+  if (playerScore == 5) {
+    resultMessage.textContent = "Congratulations! You win!";
+    currentScore.textContent = `Final score:\n Player: ${playerScore} | Computer: ${computerScore}`;
+    cleanUp();
+  } else if (computerScore == 5) {
+    resultMessage.textContent = "Sorry, you lost!";
+    currentScore.textContent = `Final score:\n Player: ${playerScore} | Computer: ${computerScore}`;
+    cleanUp();
+  } else {
+    currentScore.textContent = `Current score:\n Player: ${playerScore} | Computer: ${computerScore}`;
+  }
 }
 
-game();
+function cleanUp() {
+  const buttons = document.querySelectorAll("button");
+  buttons.forEach((button) => {
+    button.disabled = true;
+  });
+}
